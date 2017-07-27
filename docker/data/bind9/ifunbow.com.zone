@@ -1,0 +1,19 @@
+$TTL 600
+yivgame.com.    IN    SOA       ns1.yivgame.com.      admin.yivgame.com. (
+                               2013040101  
+                               1H  
+                               5M  
+                               2D  
+                               6H )  
+               IN    NS         ns1
+ns1            IN    A         192.168.1.56
+git           IN    A         192.168.1.200
+drone            IN    A         192.168.1.200
+db            IN    A         192.168.1.200
+tpapi            IN    A         192.168.1.200
+gameagent            IN    A         192.168.1.51
+test            IN    A         192.168.1.200
+kafka            IN    A         192.168.1.200
+etcd            IN    A         192.168.1.200
+h5            IN    A         192.168.1.200
+

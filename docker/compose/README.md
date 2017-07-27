@@ -1,1 +1,4 @@
 # docker-compose 
+所有服务器使用docker容器布署，所有容器使用docker-compose进行编排
+* infrastructure：该目录下存放的docker-compose文件主要负责yivgame微服务架构的依赖设施容器编排
+* game：该目录存放的docker-compose文件负责yivgame各微服务的容器编排

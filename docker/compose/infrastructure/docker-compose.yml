@@ -1,0 +1,148 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:1.12-alpine
+    volumes:
+      - /docker/data/www/service:/var/www/service
+      - /docker/data/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 192.168.1.200:80:80
+    dns:
+      - "192.168.1.56"
+    restart: always
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - /docker/data/mysql/:/var/lib/mysql
+    restart: always
+  mongo:
+    image: mongo:3.4.4
+    ports:
+      - 27017:27017
+    volumes:
+      - /docker/data/mongo/:/data/db
+    restart: always
+  gogs:
+    image: gogs/gogs
+    volumes:
+      - /docker/data/gogs/gogs:/data/gogs
+      - /docker/data/gogs/git:/data/git
+    ports:
+      - "10022:22"
+      - "10080:3000"
+    dns:
+      - "192.168.1.56"
+    restart: always
+  drone-server:
+      image: drone/drone:0.8.0
+      ports:
+        - 8000:8000
+      volumes:
+        - /var/lib/drone:/var/lib/drone/
+      restart: always
+      environment:
+        - DRONE_OPEN=true
+        - DRONE_HOST=192.168.1.200
+        - DRONE_GOGS=true
+        - DRONE_GOGS_URL=http://192.168.1.200:10080
+        - DRONE_SECRET=3a029f04d76d32e79367c4b3255dda4d
+
+  drone-agent:
+    image: drone/drone:0.8.0
+    command: agent
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_HOST=192.168.1.200
+      - DRONE_GOGS=true
+      - DRONE_GOGS_URL=http://192.168.1.200:10080
+      - DRONE_SERVER=ws://192.168.1.200:8000/ws/broker
+      - DRONE_SECRET=3a029f04d76d32e79367c4b3255dda4d
+  cockroach1:
+    image: cockroachdb/cockroach:v1.0.3
+    hostname: cockroach1
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - /docker/data/cockroach/roach1:/cockroach/cockroach-data
+    command: start --insecure
+    networks:
+      - cocknetwork
+    restart: always
+  cockroach2:
+    image: cockroachdb/cockroach:v1.0.3
+    hostname: cockroach2
+    volumes:
+      - /docker/data/cockroach/roach2:/cockroach/cockroach-data
+    command: start --insecure --join=cockroach1
+    networks:
+      - cocknetwork
+    restart: always
+  cockroach3:
+    image: cockroachdb/cockroach:v1.0.3
+    hostname: cockroach3
+    volumes:
+      - /docker/data/cockroach/roach3:/cockroach/cockroach-data
+    command: start --insecure --join=cockroach1
+    networks:
+      - cocknetwork
+    restart: always
+  etcd1:
+      image: edwin/etcd:3.2.4
+      hostname: etcd1
+      ports:
+        - "2379:2379"
+        - "2380:2380"
+      volumes:
+            - /docker/data/etcd/etcd1:/etcd-data
+      restart: always
+      environment:
+        - ETCD_NAME=etcd1
+        - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://192.168.1.200:2380
+        - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+        - ETCD_ADVERTISE_CLIENT_URLS=http://192.168.1.200:2379
+        - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+        - ETCD_INITIAL_CLUSTER=etcd1=http://192.168.1.200:2380
+        - ETCD_DATA_DIR=/etcd-data
+        - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster-1
+        - ETCD_INITIAL_CLUSTER_STATE=new
+  prometheus:
+      image: prom/prometheus
+      volumes:
+        - /docker/data/prometheus:/etc/prometheus
+      ports:
+        - "9090:9090"
+      restart: always
+  opentracing:
+      image: jaegertracing/all-in-one
+      ports:
+        - "16686:16686"
+        - "5775/udp:5775/udp"
+      restart: always
+  zookeeper:
+      image: wurstmeister/zookeeper
+      ports:
+        - "2181:2181"
+      restart: always
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.200
+#      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+networks:
+  cocknetwork:
+    driver: bridge

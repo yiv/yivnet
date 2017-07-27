@@ -1,1 +1,2 @@
 # data directory
+所有容器的数据目录都重定到data目下进行持久保存
