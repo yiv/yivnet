@@ -41,6 +41,6 @@ Yivgame is a microservice game server base on go-kit
 ## 参考
 * [go-kit](https://github.com/go-kit/kit): yivgame基于go-kit开发
 * [goddd](https://github.com/marcusolsson/goddd): 一个用go写的基于领域模型的样例APP
-* [Practical Persistence in Go: Organising Database Access](http://www.alexedwards.net/blog/organising-database-access https://zuozuohao.github.io/2016/06/16/Practical-Persistence-in-Go-Organising-Database-Access)
+* [Practical Persistence in Go: Organising Database Access](http://www.alexedwards.net/blog/organising-database-access)
 * [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 * [Applying The Clean Architecture to Go applications](http://manuel.kiessling.net/2012/09/28/applying-the-clean-architecture-to-go-applications/)
