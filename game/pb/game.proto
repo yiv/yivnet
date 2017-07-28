@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package pb;
+
+service GameService {
+    rpc Stream (stream Frame) returns (stream Frame); // 透传消息, 双向流
+}
+//双向流包
+message Frame {
+    bytes payload = 1;
+}
+//双向流请求包
+message EnterTableReq {
+    int64 uid = 1;
+    //登陆令牌
+    string token = 2;
+    //房间等级
+    int32 roomClass = 3;
+}
+message SitdownReq {
+    //座位号
+    int32 seat = 1;
+}
+message BetReq {
+    //下注金币数量
+    int64 coins = 1;
+}
+message DuelReq {
+    //被比牌玩家ID
+    int64 rival = 1;
+}
+message FriendReq {
+    //被加好友ID
+    int64 toId = 1;
+}
+message GiftReq {
+    //被加好友ID
+    int64 toId = 1;
+    //礼物ID
+    int32 giftId = 2;
+    //礼物数量
+    int32 amount = 3;
+}
+message ChatReq {
+    //消息类型或消息编码
+    int32 mid = 1;
+    //自定义消息内容
+    string msg = 2;
+}
+
+message DelegateReq {
+    //托管操作[1:自动弃牌，2:自动跟注]
+    int32 method = 1;
+    bool action = 2;
+}
+//双向流返回包
+
+message GeRes {
+    int32 code = 1;
+    int32 callSeat = 2;
+}
+message RevealRes {
+    int32 code = 1;
+    int32 callSeat = 2;
+    bytes cards = 3;
+    //牌型[1:高牌,2:对子,3:同花,4:顺子,5:同花顺,6:豹子]
+    int32 cardType = 4;
+}
+message Player {
+    //玩家ID
+    int64 uid = 1;
+    //玩家座标
+    int32 seatCode = 2;
+    //是否未看牌
+    bool blind = 3;
+    //牌桌座位号
+    int32 seat = 4;
+    //金币数量
+    int64 coin = 5;
+    //昵称
+    string nick = 6;
+    //头像路径
+    string avatar = 7;
+    //玩家牌
+    bytes cards = 8;
+    //本局下注金币
+    int64 betCoin = 9;
+    //玩家特征
+    int32 character = 10;
+    //玩家当前牌局状态
+    int32 status = 11;
+}
+message Table {
+    //桌号
+    int32 tableId = 1;
+    //当前叫牌座号
+    int32 callSeat = 2;
+    //庄家座号
+    int32 bankerSeat = 3;
+    //总注池
+    int64 jackpot = 4;
+    //当局轮数
+    int32 round = 5;
+    //当轮下注值
+    int64 roundBet = 6;
+    //牌局状态，0：等待，1：读秒准备中，3：进行中
+    int32 status = 7;
+    //桌内玩家列表
+    repeated Player players = 8;
+    //返回码
+    int32 code = 9;
+}
+message PlayerSeat {
+    //玩家ID
+    int64 uid = 1;
+    //玩家座号
+    int32 seat = 2;
+    int32 callSeat = 3;
+}
+message Reveal {
+    //座号
+    int32 seat = 1;
+    int32 callSeat = 2;
+    bytes cards = 3;
+    //牌型[1:高牌,2:对子,3:同花,4:顺子,5:同花顺,6:豹子]
+    int32 cardType = 4;
+}
+message GeCall {
+    //座号
+    int32 seat = 1;
+    int32 callSeat = 2;
+}
+message GiveUp {
+    //座号
+    int32 seat = 1;
+    //下一个叫牌座号
+    int32 callSeat = 2;
+}
+message Duel {
+    //比牌发起者、拒绝者或接受者座号（根据协议定）
+    int32 fromSeat = 1;
+    //比牌发起者、拒绝者或接受者座号（根据协议定）
+    int32 toSeat = 2;
+    //下一个叫牌座号
+    int32 callSeat = 3;
+}
+message Bet {
+    //下注玩家座号
+    int32 seat = 1;
+    //下注金币数量
+    int64 coins = 2;
+    //下一个叫牌座号
+    int32 callSeat = 3;
+}
+message DuelResult {
+    //比牌发起者座号
+    int32 fromSeat = 1;
+    //被比牌者座号
+    int32 toSeat = 2;
+    //胜者座号
+    int32 winSeat = 3;
+    //比牌二者的牌组
+    map<int32, bytes> duelCards = 4;
+    //下一个叫牌座号
+    int32 callSeat = 5;
+}
+message FriendAdd {
+    //发起、拒绝或接受加好友玩家座号（根据协议定）
+    int64 fromId = 1;
+    //发起、拒绝或接受加好友玩家座号（根据协议定）
+    int64 toId = 2;
+}
+message FriendAddResult {
+    //发起加好友玩家座号
+    int64 fromId = 1;
+    //被加好友玩家座号
+    int64 toId = 2;
+    //加友好是否接受
+    bool accept = 3;
+}
+message SendGift {
+    //送礼物玩家座号
+    int64 fromId = 1;
+    //被送礼物玩家座号
+    int64 toId = 2;
+    //礼物编号
+    int32 giftId = 3;
+    //礼物数量
+    int32 amount = 4;
+}
+message GameOver {
+    //胜者座号
+    int64 winUid = 1;
+    //税后金币
+    map<string, TableResult> result = 2;
+}
+message TableResult {
+    int64 betCoins = 1;
+    bytes cards = 2;
+    int32 cardsType = 3;
+    int32 greetType = 4;
+}
+message CardDeal {
+    //下一个叫牌座号
+    int32 callSeat = 1;
+    int32 bankerSeat = 2;
+}
+message ChatMsg {
+    //座号
+    int32 sid = 1;
+    //消息类型或消息编码
+    int32 mid = 2;
+    //自定义消息内容
+    string msg = 3;
+}
+message NetInfo {
+    //座号
+    int32 sid = 1;
+    //网络状态[在线/掉线]
+    bool status = 2;
+}
