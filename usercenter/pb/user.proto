@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package pb;
+
+service User {
+    rpc GetUserInfo (UserId) returns (UserInfo) {
+    }
+}
+message UserInfo {
+    int64 uid = 1;
+    string unionid = 2;
+    string uuid = 3;
+    string username = 4;
+    string password = 5;
+    string nick = 6;
+    bool gender = 7;
+    string addr = 8;
+    string avatar = 9;
+    bool isguest = 10;
+    int32 condays = 11;
+    int64 signdate = 12;
+    int64 vipsigndate = 13;
+    bool status = 14;
+    int64 mtime = 15;
+    int64 ctime = 16;
+    string token = 17;
+    string bankpwd = 18;
+    string forbid = 19;
+    string imsi = 20;
+    string imei = 21;
+    string mac = 22;
+    string did = 23;
+    string psystem = 24;
+    string pmodel = 25;
+    map<string, int32> others = 26;
+    int64 coin = 27;
+    int32 gem = 28;
+    int64 bank = 29;
+    int32 growth = 30;
+    int32 level = 31;
+    int32 viptype = 32;
+    int64 vipexpiry = 33;
+    int32 voucher = 34;
+    int32 online = 35;
+    map<string, int32> props = 36;
+    map<string, int32> gifts = 37;
+    map<string, int32> medals = 38;
+    repeated int64 friends = 39;
+    repeated string tags = 40;
+    map<string, int32> records = 41;
+    string err = 99;
+}
+message UserId {
+    int64 uid = 1;
+}
