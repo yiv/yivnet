@@ -16,44 +16,14 @@ import (
 	"github.com/go-kit/kit/tracing/opentracing"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 
-	"github.com/yiv/yivgame/usercenter/service"
 	"github.com/yiv/yivgame/usercenter/pb"
+	"github.com/yiv/yivgame/usercenter/service"
 )
 
 func New(conn *grpc.ClientConn, tracer stdopentracing.Tracer, logger log.Logger) service.Service {
 
 	limiter := ratelimit.NewTokenBucketLimiter(jujuratelimit.NewBucketWithRate(100, 100))
 
-	var getDeviceIDEndpoint endpoint.Endpoint
-	{
-		getDeviceIDEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"GetDeviceID",
-			service.EncodeGRPCGetDeviceIDReq,
-			service.DecodeGRPCGetDeviceIDRes,
-			pb.GetDeviceIDRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		getDeviceIDEndpoint = opentracing.TraceClient(tracer, "GetDeviceID")(getDeviceIDEndpoint)
-		getDeviceIDEndpoint = limiter(getDeviceIDEndpoint)
-
-	}
-	var loginGuestEndpoint endpoint.Endpoint
-	{
-		loginGuestEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"LoginGuest",
-			service.EncodeGRPCLoginGuestReq,
-			service.DecodeGRPCLoginGuestRes,
-			pb.LoginRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		loginGuestEndpoint = opentracing.TraceClient(tracer, "LoginGuest")(loginGuestEndpoint)
-		loginGuestEndpoint = limiter(loginGuestEndpoint)
-
-	}
 	var getUserInfoEndpoint endpoint.Endpoint
 	{
 		getUserInfoEndpoint = grpctransport.NewClient(
@@ -68,70 +38,9 @@ func New(conn *grpc.ClientConn, tracer stdopentracing.Tracer, logger log.Logger)
 		getUserInfoEndpoint = opentracing.TraceClient(tracer, "GetUserInfo")(getUserInfoEndpoint)
 		getUserInfoEndpoint = limiter(getUserInfoEndpoint)
 	}
-	var adjustCoinEndpoint endpoint.Endpoint
-	{
-		adjustCoinEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"AdjustCoin",
-			service.EncodeGRPCAdjustCoinReq,
-			service.DecodeGRPCAdjustCoinRes,
-			pb.AdjustCoinRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		adjustCoinEndpoint = opentracing.TraceClient(tracer, "AdjustCoin")(adjustCoinEndpoint)
-		adjustCoinEndpoint = limiter(adjustCoinEndpoint)
-	}
-	var adjustGiftEndpoint endpoint.Endpoint
-	{
-		adjustGiftEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"AdjustGift",
-			service.EncodeGRPCAdjustGiftReq,
-			service.DecodeGRPCAdjustGiftRes,
-			pb.AdjustGiftRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		adjustGiftEndpoint = opentracing.TraceClient(tracer, "AdjustGift")(adjustGiftEndpoint)
-		adjustGiftEndpoint = limiter(adjustGiftEndpoint)
-	}
-	var adjustGemEndpoint endpoint.Endpoint
-	{
-		adjustGemEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"AdjustGem",
-			service.EncodeGRPCAdjustGemReq,
-			service.DecodeGRPCAdjustGemRes,
-			pb.AdjustGemRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		adjustGemEndpoint = opentracing.TraceClient(tracer, "AdjustGem")(adjustGemEndpoint)
-		adjustGemEndpoint = limiter(adjustGemEndpoint)
-	}
-	var updateSeatCodeEndpoint endpoint.Endpoint
-	{
-		updateSeatCodeEndpoint = grpctransport.NewClient(
-			conn,
-			"pb.User",
-			"UpdateSeatCode",
-			service.EncodeGRPCUpdateSeatCodeReq,
-			service.DecodeGRPCUpdateSeatCodeRes,
-			pb.UpdateSeatCodeRes{},
-			grpctransport.ClientBefore(opentracing.ContextToGRPC(tracer, logger)),
-		).Endpoint()
-		updateSeatCodeEndpoint = opentracing.TraceClient(tracer, "UpdateSeatCode")(updateSeatCodeEndpoint)
-		updateSeatCodeEndpoint = limiter(updateSeatCodeEndpoint)
-	}
+
 	return service.Endpoints{
-		GetDeviceIDEndpoint:    getDeviceIDEndpoint,
-		LoginGuestEndpoint:     loginGuestEndpoint,
-		GetUserInfoEndpoint:    getUserInfoEndpoint,
-		AdjustCoinEndpoint:     adjustCoinEndpoint,
-		AdjustGiftEndpoint:     adjustGiftEndpoint,
-		AdjustGemEndpoint:      adjustGemEndpoint,
-		UpdateSeatCodeEndpoint: updateSeatCodeEndpoint,
+		GetUserInfoEndpoint: getUserInfoEndpoint,
 	}
 
 }
