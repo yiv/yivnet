@@ -23,10 +23,14 @@ Yivgame is a microservice game server base on go-kit
   * Protobuf：主要用于客户端与服务端websocket间和微务间的数据交换
 
 ### 服务组件图
-![通信图](doc/img/组件图.png)
+![服务组件图](doc/img/组件图.png)
 * Agent：主要用于客户端的接入，它直接将数据报文透传、转发到后端微服务，是一个傻网关、薄网关，几乎不参与业务逻辑和编解码业务数据，所以其代码逻辑相对简单，也极易进行水平扩展
 * UserCenter：所有玩家数据集中在 user center 进行管理，由 user center 负责游戏数据的读写删改查，它提供grpc接口供apigate、game server等其它需要请求玩家数据微服务使用
 * Game Server：主要负责游戏业务逻辑的处理
+### 身份认证
+![图](doc/img/认证.png)
+* 服务与服务之间使用jwt进行身份认证
+* 通过API gateway实现单点登陆
 ## 设施依赖
 * docker：所有依赖设施服务和游戏实例通过docker社区版进行布署
 * rockcoach：作为持久化数据库
