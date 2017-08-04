@@ -39,6 +39,7 @@ Yivgame is a microservice game server base on go-kit
 * Ubuntu Server 16.04
 
 ## 参考
+* [gonet/2](https://gonet2.github.io/): yivgame从gonet吸取了很多设计，如使用stream进行透传、引入kafka等
 * [go-kit](https://github.com/go-kit/kit): yivgame基于go-kit开发
 * [goddd](https://github.com/marcusolsson/goddd): 一个用go写的基于领域模型的样例APP
 * [Practical Persistence in Go: Organising Database Access](http://www.alexedwards.net/blog/organising-database-access)
