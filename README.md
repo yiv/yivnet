@@ -1,5 +1,6 @@
 # yivgame
-Yivgame is a microservice game server base on go-kit
+Yivgame是用go语言基于go-kit写的一套微服务架构游戏服务器方案，它不是一个框架，是一整套游戏服务器实例，每个模块只保留了一份示例代码实现。除了游戏服务器（长连接），还包含针对前端和后台运营的API接口服务器，运营后台的界面会使用Angular实现。
+除了服务器本身之外，还会涉及docker部署的详细配置。
 
 ## 特性
 * 微服务架构
