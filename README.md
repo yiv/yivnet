@@ -41,6 +41,9 @@ Yivgame是用go语言基于go-kit写的一套微服务架构游戏服务器方�
 * gogs：使用gogs进行版本管理
 * drone：用于实现持续集成
 * bind9：域名服务器，通过切换域名解析实现开发、测试网络的无缝切换
+## go-kit generator
+* [yiv/gk](https://github.com/yiv/gk): go-kit 代码生成器是一把手电钻，go-kit目前发现的唯一的不爽就是写一个服务太啰嗦，它设计了一套很优雅的服务输出方式，但为了写一个服务接口，每个都要写一整套endpoint、set和transport，代码模式都是相同的，这一大坨大坨的代码基本相似，手写得多了就会很烦燥，感觉在做重复的工作，打了几遍都没有发现完全符合go-kit官方实便的generator，最后选中了[kujtimiihoxha/gk](https://github.com/kujtimiihoxha/gk)，但它还没有很多地方并不完善，也不完全适用于我，于是fork下来自己改，通过它自动生成代码，在写服务接口的时候可以美减少60%的重复代码，更重要的是，它极大地降低了出错的概率。
+
 ## 系统环境
 * Ubuntu Server 16.04
 
