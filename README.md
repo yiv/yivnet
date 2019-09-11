@@ -82,3 +82,10 @@ Yivgame是用go语言基于go-kit写的一套微服务架构游戏服务器方�
 * [Practical Persistence in Go: Organising Database Access](http://www.alexedwards.net/blog/organising-database-access)
 * [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 * [Applying The Clean Architecture to Go applications](http://manuel.kiessling.net/2012/09/28/applying-the-clean-architecture-to-go-applications/)
+
+## 关于设计的一些思考
+* 系统的复杂性只会转移，不会消失，直白简单背后都是脏活累活，简单都是有成本的，要么降低性能、要么回避一些特性如扩展性，要么由其它人来做，使用 go-kit 的好处是它看起来不那么简单，把设计目标直接体现在代码里，学习使用 go-kit 有助于提高软件设计能力
+* go-kit 不适合追求易上手、短平快的目标，它使用分层来分离关注，必定引入复杂性，代码看起来可能穿插啰嗦，但是关注分离的设计有助于逻辑解耦
+* go-kit 始于 service interface，始于关注业务领域，http 或是 grpc 只是对外发布的方式，放在最后处理
+* 不追求写法上的自由，要追求软件适应性的自由，自由不是说我想怎么写就怎么写，代码要有规范，团队要统一编程风格，才便于沟通，go-kit 不自由，因为他定义了自己软件的设计范式，导致的结果就是用它写出来的服务，看起来都长得差不多
+* 微服务调用的编解码和通讯，引入的延时成本大概为 2 毫秒，国内互 Ping 延时通常为 40ms
