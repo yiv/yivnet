@@ -82,6 +82,7 @@ Yivgame是用go语言基于go-kit写的一套微服务架构游戏服务器方�
 * [Practical Persistence in Go: Organising Database Access](http://www.alexedwards.net/blog/organising-database-access)
 * [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 * [Applying The Clean Architecture to Go applications](http://manuel.kiessling.net/2012/09/28/applying-the-clean-architecture-to-go-applications/)
+* [一篇文章读懂分层架构](https://zhuanlan.zhihu.com/p/40353581)
 
 ## 关于设计的一些思考
 * 系统的复杂性只会转移，不会消失，直白简单背后都是脏活累活，简单都是有成本的，要么降低性能、要么回避一些特性如扩展性，要么由其它人来做，使用 go-kit 的好处是它看起来不那么简单，把设计目标直接体现在代码里，学习使用 go-kit 有助于提高软件设计能力
